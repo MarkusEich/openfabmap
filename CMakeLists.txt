@@ -75,7 +75,7 @@ file(GLOB OPENFABMAP_IMPL_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 file(GLOB OPENFABMAP_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 # tell cmake about the library
-add_library(openFABMAP ${OPENFABMAP_FILES}
+add_library(openFABMAP SHARED ${OPENFABMAP_FILES}
     ${OPENFABMAP_IMPL_INCS} ${OPENFABMAP_INCS})
 
 # Tell CMake where the headers are
@@ -125,3 +125,16 @@ if(DOXYGEN_CREATE_DOCS)
         message(WARNING "Doxygen package not found, no documentation target")
     endif(DOXYGEN_FOUND)
 endif(DOXYGEN_CREATE_DOCS)
+
+
+
+CONFIGURE_FILE(./src/openfabmap.pc.in openfabmap.pc @ONLY)
+
+install(TARGETS openFABMAPcli openFABMAP 
+  RUNTIME DESTINATION bin 
+  LIBRARY DESTINATION lib)
+
+install(DIRECTORY include/ DESTINATION include/ FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY include/ DESTINATION include/ FILES_MATCHING PATTERN "*.hpp")
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/openfabmap.pc DESTINATION lib/pkgconfig)
